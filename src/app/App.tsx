@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   Code2,
@@ -46,27 +46,50 @@ const templates = [
 type TemplateId = (typeof templates)[number]["id"];
 
 type Project = {
-  id: number;
+  id: string;
   name: string;
   templateName: string;
   status: string;
 };
 
+const starterProject: Project = {
+  id: "starter-workspace",
+  name: "Starter workspace",
+  templateName: "React",
+  status: "Ready",
+};
+
+const projectsStorageKey = "collab-dev-projects";
+
 export function App() {
   const [projectName, setProjectName] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("react");
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: 1,
-      name: "Starter workspace",
-      templateName: "React",
-      status: "Ready",
-    },
-  ]);
+  const [projects, setProjects] = useState<Project[]>(() => {
+    const savedProjects = window.localStorage.getItem(projectsStorageKey);
+
+    if (!savedProjects) {
+      return [starterProject];
+    }
+
+    try {
+      const parsedProjects = JSON.parse(savedProjects) as Project[];
+      return parsedProjects.length > 0 ? parsedProjects : [starterProject];
+    } catch {
+      return [starterProject];
+    }
+  });
+  const [activeProjectId, setActiveProjectId] = useState("starter-workspace");
 
   const selectedTemplateLabel = useMemo(() => {
     return templates.find((template) => template.id === selectedTemplate)?.name ?? "React";
   }, [selectedTemplate]);
+
+  const activeProject =
+    projects.find((project) => project.id === activeProjectId) ?? projects[0];
+
+  useEffect(() => {
+    window.localStorage.setItem(projectsStorageKey, JSON.stringify(projects));
+  }, [projects]);
 
   function createProject() {
     const cleanName = projectName.trim();
@@ -75,15 +98,18 @@ export function App() {
       return;
     }
 
+    const newProject: Project = {
+      id: crypto.randomUUID(),
+      name: cleanName,
+      templateName: selectedTemplateLabel,
+      status: "Ready",
+    };
+
     setProjects((currentProjects) => [
-      {
-        id: Date.now(),
-        name: cleanName,
-        templateName: selectedTemplateLabel,
-        status: "Draft",
-      },
+      newProject,
       ...currentProjects,
     ]);
+    setActiveProjectId(newProject.id);
     setProjectName("");
   }
 
@@ -221,13 +247,22 @@ export function App() {
 
             <div className="project-list">
               {projects.map((project) => (
-                <article className="project-card" key={project.id}>
+                <button
+                  className={
+                    project.id === activeProject?.id ? "project-card active-project" : "project-card"
+                  }
+                  key={project.id}
+                  type="button"
+                  onClick={() => setActiveProjectId(project.id)}
+                >
                   <div>
                     <h3>{project.name}</h3>
                     <p>{project.templateName}</p>
                   </div>
-                  <span className="status-pill">{project.status}</span>
-                </article>
+                  <span className="status-pill">
+                    {project.id === activeProject?.id ? "Selected" : project.status}
+                  </span>
+                </button>
               ))}
             </div>
           </section>

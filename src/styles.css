@@ -307,13 +307,23 @@ h1 {
 
 .project-card {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   border: 1px solid #dde3ee;
   border-radius: 8px;
   background: #f8fafc;
+  color: inherit;
+  cursor: pointer;
   gap: 14px;
   padding: 16px;
+  text-align: left;
+}
+
+.project-card:hover,
+.project-card.active-project {
+  border-color: #2454d6;
+  background: #eef4ff;
 }
 
 .project-card h3 {
