@@ -223,6 +223,132 @@ h1 {
   margin-top: 20px;
 }
 
+.team-panel {
+  margin-top: 20px;
+  border: 1px solid #dde3ee;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 20px;
+}
+
+.workspace-panel {
+  margin-top: 20px;
+  border: 1px solid #dde3ee;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 20px;
+}
+
+.review-panel {
+  margin-top: 20px;
+  border: 1px solid #dde3ee;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 20px;
+}
+
+.review-form {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.change-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.change-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid #dde3ee;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 14px 16px;
+}
+
+.change-card h3 {
+  margin: 0 0 4px;
+  color: #0f172a;
+  font-size: 0.98rem;
+}
+
+.change-card p,
+.empty-message {
+  margin: 0;
+  color: #64748b;
+}
+
+.approve-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  border: 1px solid #86efac;
+  border-radius: 7px;
+  background: #f0fdf4;
+  color: #166534;
+  cursor: pointer;
+  gap: 7px;
+  padding: 0 12px;
+  font-weight: 750;
+}
+
+.file-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.file-tab {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #d7def0;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #475569;
+  cursor: pointer;
+  gap: 7px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.file-tab.active-file {
+  border-color: #2454d6;
+  background: #eef4ff;
+  color: #2454d6;
+}
+
+.code-editor {
+  width: 100%;
+  min-height: 260px;
+  margin-top: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 16px;
+  resize: vertical;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.code-editor:focus {
+  border-color: #6d8eff;
+  outline: 3px solid #dbe6ff;
+}
+
+.panel-subtitle {
+  margin: 5px 0 0;
+  color: #64748b;
+}
+
 .create-panel,
 .projects-panel {
   border: 1px solid #dde3ee;
@@ -248,6 +374,79 @@ h1 {
   border-radius: 8px;
   color: #0f172a;
   padding: 0 12px;
+}
+
+.invite-form {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 140px auto;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.role-select {
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0 10px;
+}
+
+.invite-message,
+.helper-text {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.invite-message {
+  margin: 14px 0 0;
+  color: #166534;
+  font-weight: 650;
+}
+
+.member-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.member-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dde3ee;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 14px 16px;
+}
+
+.member-card svg {
+  color: #2454d6;
+}
+
+.member-card h3 {
+  margin: 0 0 3px;
+  color: #0f172a;
+  font-size: 0.96rem;
+}
+
+.member-card p {
+  margin: 0;
+  color: #64748b;
+}
+
+.member-card .status-pill {
+  margin-left: auto;
+}
+
+.status-pill.invited {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.helper-text {
+  margin: 18px 0 0;
+  font-size: 0.92rem;
 }
 
 .text-input:focus {
@@ -372,6 +571,18 @@ h1 {
   .builder-grid {
     grid-template-columns: 1fr;
   }
+
+  .invite-form {
+    grid-template-columns: 1fr 140px;
+  }
+
+  .review-form {
+    grid-template-columns: 1fr;
+  }
+
+  .invite-form .primary-button {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 560px) {
@@ -387,6 +598,14 @@ h1 {
 
   .nav-list {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .invite-form {
+    grid-template-columns: 1fr;
+  }
+
+  .invite-form .primary-button {
+    grid-column: auto;
   }
 }
 
