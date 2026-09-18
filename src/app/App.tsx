@@ -1,4 +1,13 @@
-import { CheckCircle2, Code2, GitBranch, Play, UsersRound } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  CheckCircle2,
+  Code2,
+  FileCode2,
+  GitBranch,
+  Plus,
+  Play,
+  UsersRound,
+} from "lucide-react";
 
 const mvpSteps = [
   "Create",
@@ -11,7 +20,73 @@ const mvpSteps = [
   "Run",
 ];
 
+const templates = [
+  {
+    id: "html",
+    name: "HTML/CSS/JS",
+    description: "Best for the first simple website or landing page.",
+  },
+  {
+    id: "react",
+    name: "React",
+    description: "Best for a modern interactive web app.",
+  },
+  {
+    id: "node",
+    name: "Node.js",
+    description: "Best for backend APIs and server logic.",
+  },
+  {
+    id: "python",
+    name: "Python",
+    description: "Best for scripts, data tools, and automation.",
+  },
+];
+
+type TemplateId = (typeof templates)[number]["id"];
+
+type Project = {
+  id: number;
+  name: string;
+  templateName: string;
+  status: string;
+};
+
 export function App() {
+  const [projectName, setProjectName] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("react");
+  const [projects, setProjects] = useState<Project[]>([
+    {
+      id: 1,
+      name: "Starter workspace",
+      templateName: "React",
+      status: "Ready",
+    },
+  ]);
+
+  const selectedTemplateLabel = useMemo(() => {
+    return templates.find((template) => template.id === selectedTemplate)?.name ?? "React";
+  }, [selectedTemplate]);
+
+  function createProject() {
+    const cleanName = projectName.trim();
+
+    if (!cleanName) {
+      return;
+    }
+
+    setProjects((currentProjects) => [
+      {
+        id: Date.now(),
+        name: cleanName,
+        templateName: selectedTemplateLabel,
+        status: "Draft",
+      },
+      ...currentProjects,
+    ]);
+    setProjectName("");
+  }
+
   return (
     <main className="app-shell">
       <aside className="sidebar">
@@ -42,7 +117,11 @@ export function App() {
             <p className="eyebrow">MVP foundation</p>
             <h1>Team workspace</h1>
           </div>
-          <button className="primary-button" type="button">
+          <button className="primary-button" type="button" onClick={createProject}>
+            <Plus size={18} aria-hidden="true" />
+            Create project
+          </button>
+          <button className="secondary-button" type="button">
             <Play size={18} aria-hidden="true" />
             Run
           </button>
@@ -82,6 +161,76 @@ export function App() {
               <li key={step}>{step}</li>
             ))}
           </ol>
+        </section>
+
+        <section className="builder-grid" id="projects">
+          <form
+            className="create-panel"
+            onSubmit={(event) => {
+              event.preventDefault();
+              createProject();
+            }}
+          >
+            <div className="panel-header">
+              <h2>Create project</h2>
+              <span>Step 1</span>
+            </div>
+
+            <label className="field-label" htmlFor="project-name">
+              Project name
+            </label>
+            <input
+              id="project-name"
+              className="text-input"
+              placeholder="Example: Team portfolio"
+              value={projectName}
+              onChange={(event) => setProjectName(event.target.value)}
+            />
+
+            <div className="template-heading">Choose a starter</div>
+            <div className="template-list">
+              {templates.map((template) => (
+                <button
+                  className={
+                    template.id === selectedTemplate ? "template-card selected" : "template-card"
+                  }
+                  key={template.id}
+                  type="button"
+                  onClick={() => setSelectedTemplate(template.id)}
+                >
+                  <FileCode2 size={18} aria-hidden="true" />
+                  <span>
+                    <strong>{template.name}</strong>
+                    <small>{template.description}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <button className="primary-button full-width" type="submit">
+              <Plus size={18} aria-hidden="true" />
+              Create project
+            </button>
+          </form>
+
+          <section className="projects-panel" aria-label="Projects">
+            <div className="panel-header">
+              <h2>Projects</h2>
+              <span>{projects.length} total</span>
+            </div>
+
+            <div className="project-list">
+              {projects.map((project) => (
+                <article className="project-card" key={project.id}>
+                  <div>
+                    <h3>{project.name}</h3>
+                    <p>{project.templateName}</p>
+                  </div>
+                  <span className="status-pill">{project.status}</span>
+                </article>
+              ))}
+            </div>
+          </section>
         </section>
       </section>
     </main>
